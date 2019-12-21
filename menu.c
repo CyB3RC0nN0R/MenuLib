@@ -23,7 +23,7 @@ void get_console_dimensions(int* width, int* height)
 	*height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void show_menu(const int itemc, struct MenuItem itemv[], const char title[], bool loopback, bool pause)
+void show_menu(const int itemc, struct MenuItem itemv[], const char title[], bool loopback, bool pause, enum MenuStyle style)
 {
 	unsigned width, height, item_index;
 	char key;
@@ -34,22 +34,24 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 
 	// Get the width and height of the console window
 	get_console_dimensions(&width, &height);
-
+	
 	// Print frame with title
 	for (unsigned i = 0; i < height - 1; ++i)
 	{
 		// Top line with title
 		if (i == 0)
 		{
-			for (unsigned j = 0; j < width - strlen(title) + 1; ++j)
+			for (unsigned j = 0; j < width - strlen(title) - 1; ++j)
 			{
-				if (j == (width - strlen(title)) / 2)
+				if (j == ((width - strlen(title)) - 2)/ 2)
 				{
+					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('[') : putchar(' ');
 					fputs(title, stdout);
+					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('[') : putchar(' ');
 				}
-				else
+				else 
 				{
-					putchar('*');
+					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('-') : putchar(' ');
 				}
 			}
 		}
@@ -57,38 +59,55 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 		else if (is_item_line(i, itemc, &item_index))
 		{
 			// Print item text
-			printf("*\t%c) %s", itemv[item_index].key, itemv[item_index].text);
 
+			style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ');
+
+ 			if (strcmp(itemv[item_index].text, "BLANK") == 0) {
+				putchar('\t');
+
+				// BLANK equals 5 characters 
+				// + 3 since it regularly is "%c) " inbetween title and key
+				for (unsigned j = 0; j < 8; ++j)
+				{
+					putchar(' ');
+				}
+			}
+			else {
+				printf("\t%c) %s", itemv[item_index].key, itemv[item_index].text);
+				
+			}
+			
 			// Print right side of frame
 			for (unsigned j = 0; j < width - strlen(itemv[item_index].text) - 12; ++j)
 			{
 				putchar(' ');
 			}
-			putchar('*');
+			
+			style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ');
 		}
 		// Line above bottom line
-		else if (i == height - 2)
+		else if (i == height - 3)
 		{
 			for (unsigned j = 0; j < width; ++j)
 			{
-				putchar('*');
+				style == DEFAULT ? putchar('*') : style == MODERN ? putchar('-') : putchar(' ');
 			}
 		}
 		// Blank line
 		else
 		{
-			putchar('*');
+			i != height - 2 ? style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ') : putchar(' ');
 			for (unsigned j = 0; j < width - 2; ++j)
 			{
 				putchar(' ');
 			}
-			putchar('*');
+			i != height - 2 ? style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ') : putchar(' ');
 		}
-		putchar('\n');
 	}
 
 	// Wait for user selection
-	putchar('> ');
+	putchar('>');
+	putchar(' ');
 	action_performed = false;
 	do {
 		key = _getch();
@@ -114,6 +133,6 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 	// Show menu again if requested
 	if (loopback)
 	{
-		show_menu(itemc, itemv, title, loopback, pause);
+		show_menu(itemc, itemv, title, loopback, pause, style);
 	}
 }
