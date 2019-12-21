@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "framework.h"
 #include "menu.h"
 
 // Checks if a line index should display a menu item
