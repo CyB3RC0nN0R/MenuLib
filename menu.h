@@ -10,15 +10,24 @@ struct MenuItem {
 };
 
 
+struct MenuBorder {
+	char line_vertical;
+	char line_horizontal;
+	char corner_upper_left;
+	char corner_upper_right;
+	char corner_lower_left;
+	char corner_lower_right;
+	char title_left;
+	char title_right;
+};
+
+const extern struct MenuBorder DEFAULT, MODERN, NO_BORDER, SOLID;
+
 /// <summary>Is used for style-switching</summary>
 /// <item name="DEFAULT">Default style with asterisks around the terminal</item>
+/// <item name="SOLID">Solid border with ASCII border characters</item>
 /// <item name="MODERN">Minimalistic design with bar instead of start>/item>
 /// <item name="NO_BORDER">No border, just plain text</item>
-enum MenuStyle {
-	DEFAULT,
-	MODERN,
-	NO_BORDER
-};
 
 
 /// <summary>Displaces a CUI menu to the user and lets them choose an option, then calls the corresponding function.</summary>
@@ -27,5 +36,5 @@ enum MenuStyle {
 /// <param name="title">The title of the menu.</param>
 /// <param name="loopback">If this parameter is set to <c>true</c>, the menu will be displayed again after an action is executed.</param>
 /// <param name="pause">If this parameter is set to <c>true</c>, a <c>pause</c>command will be run after an action is executed.</param>
-/// <param name="style">Specifies the style in which the menu is displayed.</param>
-void show_menu(const int itemc, struct MenuItem itemv[], const char title[], bool loopback, bool pause, enum MenuStyle style);
+/// <param name="border">Specifies the border in which the menu is displayed.</param>
+void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const bool loopback, const bool pause, const struct MenuBorder *border);

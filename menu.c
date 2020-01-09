@@ -2,6 +2,22 @@
 #include "framework.h"
 #include "menu.h"
 
+const struct MenuBorder DEFAULT = {
+	'*', '*', '*', '*', '*', '*', '[', ']'
+};
+
+const struct MenuBorder MODERN = {
+	'|', '-', '-', '-', '-', '-', '-', '-'
+};
+
+const struct MenuBorder NO_BORDER = {
+	' ', ' ', ' ', ' ', ' ' ,' ' ,' ' ,' '
+};
+
+const struct MenuBorder SOLID = {
+	186, 205, 201, 187, 200, 188, '[', ']'
+};
+
 // Checks if a line index should display a menu item
 bool is_item_line(const int line, const int itemc, int* item_index)
 {
@@ -24,7 +40,7 @@ void get_console_dimensions(int* width, int* height)
 	*height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void show_menu(const int itemc, struct MenuItem itemv[], const char title[], bool loopback, bool pause, enum MenuStyle style)
+void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const bool loopback, const bool pause, const struct MenuBorder *border)
 {
 	unsigned width, height, item_index;
 	char key;
@@ -42,26 +58,31 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 		// Top line with title
 		if (i == 0)
 		{
-			for (unsigned j = 0; j < width - strlen(title) - 1; ++j)
+			// Upper left corner
+			putchar(border->corner_upper_left);
+
+			for (unsigned j = 1; j < width - strlen(title) - 2; ++j)
 			{
 				if (j == ((width - strlen(title)) - 2)/ 2)
 				{
-					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('[') : putchar(' ');
+					putchar(border->title_left);
 					fputs(title, stdout);
-					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('[') : putchar(' ');
+					putchar(border->title_right);
 				}
 				else 
 				{
-					style == DEFAULT ? putchar('*') : style == MODERN ? putchar('-') : putchar(' ');
+					putchar(border->line_horizontal);
 				}
 			}
+
+			// Upper right corner
+			putchar(border->corner_upper_right);
 		}
 		// Line with menu item
 		else if (is_item_line(i, itemc, &item_index))
 		{
 			// Print item text
-
-			style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ');
+			putchar(border->line_vertical);
 
  			if (strcmp(itemv[item_index].text, "BLANK") == 0) {
 				putchar('\t');
@@ -73,9 +94,9 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 					putchar(' ');
 				}
 			}
-			else {
+			else
+			{
 				printf("\t%c) %s", itemv[item_index].key, itemv[item_index].text);
-				
 			}
 			
 			// Print right side of frame
@@ -84,25 +105,31 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 				putchar(' ');
 			}
 			
-			style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ');
+			putchar(border->line_vertical);
 		}
 		// Line above bottom line
 		else if (i == height - 3)
 		{
-			for (unsigned j = 0; j < width; ++j)
+			// Lower left corner
+			putchar(border->corner_lower_left);
+
+			for (unsigned j = 1; j < width - 1; ++j)
 			{
-				style == DEFAULT ? putchar('*') : style == MODERN ? putchar('-') : putchar(' ');
+				putchar(border->line_horizontal);
 			}
+
+			// Lower right corner
+			putchar(border->corner_lower_right);
 		}
 		// Blank line
 		else
 		{
-			i != height - 2 ? style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ') : putchar(' ');
+			i != height - 2 ? putchar(border->line_vertical) : putchar(' ');
 			for (unsigned j = 0; j < width - 2; ++j)
 			{
 				putchar(' ');
 			}
-			i != height - 2 ? style == DEFAULT ? putchar('*') : style == MODERN ? putchar('|') : putchar(' ') : putchar(' ');
+			i != height - 2 ? putchar(border->line_vertical) : putchar(' ');
 		}
 	}
 
@@ -134,6 +161,6 @@ void show_menu(const int itemc, struct MenuItem itemv[], const char title[], boo
 	// Show menu again if requested
 	if (loopback)
 	{
-		show_menu(itemc, itemv, title, loopback, pause, style);
+		show_menu(itemc, itemv, title, loopback, pause, border);
 	}
 }
