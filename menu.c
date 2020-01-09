@@ -40,11 +40,59 @@ void get_console_dimensions(int* width, int* height)
 	*height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const bool loopback, const bool pause, const struct MenuBorder *border)
+void page(const struct MenuPage *pages, const size_t page_count) {
+	unsigned int page_index = 0;
+	bool action_performed, loop, pageChanged = true;
+	char pageKey, itemKey;
+
+	do {
+		do {
+			show_menu(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
+
+			// Wait for user selection
+			putchar('>');
+			putchar(' ');
+	
+			loop = pages[page_index].loopback;
+			pageKey = _getch();
+
+			if (pageKey == 'm')
+				page_index < page_count - 1 ? page_index++ : page_index;
+			else if (pageKey == 'n') 
+				page_index > 0 ? page_index-- : page_index;
+			else {
+				pageChanged = false;
+				itemKey = pageKey;
+				do {
+					action_performed = false;
+
+					itemKey != pageKey ? itemKey = _getch() : pageKey;
+					pageKey = 0;
+					for (int i = 0; i < pages[page_index].item_count; ++i) {
+						if (pages[page_index].items[i].key == itemKey) {
+							// Perform action
+							system("cls");
+							pages[page_index].items[i].action();
+							action_performed = true;
+
+							// Pause if requested
+							if (pages[page_index].pause) {
+								putchar('\n');
+								system("pause");
+							}
+						} 
+					}
+				} while (!action_performed);
+			}
+		} while (loop || pageChanged);
+
+		page_index = 0;
+	} while (1);
+}
+
+void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder *border)
 {
 	unsigned width, height, item_index;
-	char key;
-	bool action_performed;
 
 	// Clear the console window
 	system("cls");
@@ -131,36 +179,5 @@ void show_menu(const int itemc, const struct MenuItem itemv[], const char title[
 			}
 			i != height - 2 ? putchar(border->line_vertical) : putchar(' ');
 		}
-	}
-
-	// Wait for user selection
-	putchar('>');
-	putchar(' ');
-	action_performed = false;
-	do {
-		key = _getch();
-		for (int i = 0; i < itemc; ++i)
-		{
-			if (itemv[i].key == key)
-			{
-				// Perform action
-				system("cls");
-				itemv[i].action();
-				action_performed = true;
-
-				// Pause if requested
-				if (pause)
-				{
-					putchar('\n');
-					system("pause");
-				}
-			}
-		}
-	} while (!action_performed);
-
-	// Show menu again if requested
-	if (loopback)
-	{
-		show_menu(itemc, itemv, title, loopback, pause, border);
 	}
 }
