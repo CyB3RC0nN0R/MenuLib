@@ -2,9 +2,21 @@
 CUI generation library for C on Windows
 
 
-## Hinweis zum Installieren:
+## Einbindung in eine Visual Studio Projektmappe:
 
-Sowohl "menu.c" als auch "menu.h" zum Projektordner hinzufügen und mit ```#include "menu.h"``` einbinden.
+Repository klonen und das Projekt "MenuLib" zur Projektmappe hinzufügen:
+> Rechtsklick auf Projektmappe -> Hinzufügen -> Vorhandenes Projekt...
+
+Verweis auf die Bibliothek im Aufruferprojekt anlegen:
+> Rechtsklick auf Aufruferprojekt -> Hinzufügen -> Verweis...
+> Haken bei "MenuLib" setzen.
+
+Zusätzliches Includeverzeichnis hinzufügen:
+> Rechtsklick auf Aufruferprojekt -> Eigenschaften -> Linked -> Eingabe -> Zusätzliche Abhängigkeiten -> Bearbeiten...
+> Ordner, der "menu.h" enthält, auswählen
+
+Headerdatei einbinden:
+> Zeile ```#include "menu.h"``` zur Quelldatei hinzufügen
 
 ### Anwendungsbeispiel
 ```C
