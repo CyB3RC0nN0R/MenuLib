@@ -40,7 +40,7 @@ void get_console_dimensions(int* width, int* height)
 	*height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void page(const struct MenuPage *pages, const size_t page_count) {
+void page(const struct MenuPage *pages, const size_t page_count, const bool infinite_loop) {
 	unsigned int page_index = 0;
 	bool action_performed, loop, pageChanged = true;
 	char pageKey, itemKey;
@@ -87,7 +87,7 @@ void page(const struct MenuPage *pages, const size_t page_count) {
 		} while (loop || pageChanged);
 
 		page_index = 0;
-	} while (1);
+	} while (infinite_loop);
 }
 
 void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder *border)

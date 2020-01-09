@@ -3,15 +3,12 @@
 #include "pch.h"
 
 
-
 /// <summary>Represents one menu item in a menu.</summary>
 struct MenuItem {
 	char* text;
 	char key;
 	void* (*action)(void);
 };
-
-
 
 /// <summary>Represents a border in which a menu is displayed.</summary>
 struct MenuBorder {
@@ -27,6 +24,7 @@ struct MenuBorder {
 
 const extern struct MenuBorder DEFAULT, MODERN, NO_BORDER, SOLID;
 
+
 /// <summary>Represents a page in the menu.</summary>
 struct MenuPage {
 	const struct MenuItem* items;
@@ -35,6 +33,13 @@ struct MenuPage {
 	bool loopback, pause;
 	const struct MenuBorder* border;
 };
+
+
+/// <summary>Constructs a menu with a specific amount of pages</summary>
+/// <param name="pages">An array of all pages to display.</param>
+/// <param name="page_count">The length of the array <c>pages</c>.</param>
+/// <param name="infinite_loop">Always display the first page after a loopback=false item finished executing.</param>
+void page(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
 
 /// <summary>Displaces a CUI menu to the user</summary>
 /// <param name="itemc">The length of the array <c>itemv</c> of menu items.</param>
