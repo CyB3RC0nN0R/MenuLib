@@ -7,7 +7,7 @@ const struct MenuBorder DEFAULT = {
 };
 
 const struct MenuBorder MODERN = {
-	'|', '-', '-', '-', '-', '-', '-', '-'
+	'|', '-', '-', '-', '-', '-', '[', ']'
 };
 
 const struct MenuBorder NO_BORDER = {
