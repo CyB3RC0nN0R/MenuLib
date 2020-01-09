@@ -4,7 +4,7 @@ CUI generation library for C on Windows
 
 ## Hinweis zum Installieren:
 
-Sowohl "menu.c" als auch "menu.h" zum Projektordner hinzufügen und mit ```C#include "menu.h"``` einbinden.
+Sowohl "menu.c" als auch "menu.h" zum Projektordner hinzufügen und mit ```#include "menu.h"``` einbinden.
 
 ### Anwendungsbeispiel
 ```C
