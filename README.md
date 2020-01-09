@@ -33,7 +33,7 @@ struct MenuItem items[] = {
 	{"BLANK",			NULL, (void*)NULL}, 
 	{"Exit",			'q', (void*)&exit}		// exit beendet das Programm
 };
-show_menu(sizeof(items) / sizeof(struct MenuItem), items, "Vorlesungsaufgaben", true, true, NO_BORDER); 
+show_menu(sizeof(items) / sizeof(struct MenuItem), items, "Vorlesungsaufgaben", true, true, &NO_BORDER); 
 	
 /* 
  * 1. Argument: Anzahl der Elemente; Einfach so lassen
@@ -41,7 +41,7 @@ show_menu(sizeof(items) / sizeof(struct MenuItem), items, "Vorlesungsaufgaben", 
  * 3. Argument: Titel des Menüs	 
  * 4. Argument: Menü im loop; Nach beenden der Methode wieder Menü aufrufen	
  * 5. Argument: Pause nach dem Ausführen der Methode; Ausgaben lesbar
- * 6. Argument: Style des Menüs: DEFAULT, MODERN und NO_BORDER zur Zeit unterstützt
+ * 6. Argument: Style des Menüs: DEFAULT, MODERN, SOLID und NO_BORDER zur Zeit unterstützt
 */
   ````
   
