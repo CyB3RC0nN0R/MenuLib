@@ -44,10 +44,10 @@ show_menu(sizeof(items) / sizeof(struct MenuItem), items, "Vorlesungsaufgaben", 
  * 6. Argument: Style des Menüs: Standardmäßig wird DEFAULT, MODERN, SOLID und NO_BORDER unterstützt
  */
   ````
-### Style hinzufügen
-Eigene Styles können wie folgt hinzugefügt werden:		
+### Border hinzufügen
+Eigene Border-Styles können wie folgt hinzugefügt werden:		
 ```C
-const struct MenuBoder NAME = {	 
+const struct MenuBorder NAME = {	 
  'a', 	// Char für den rechten und linken Rand
  'b', 	// Char für den oberen und unteren Rand
  'c', 	// Char für die linke obere Ecke
@@ -59,4 +59,4 @@ const struct MenuBoder NAME = {
 }
 ```
 
-Neue Styles am Besten direkt unter den #include Anweisungen einfügen. Der neue Style kann über den angegebenen Namen verwendet werden.
+Neue Border am Besten direkt unter den ```#include``` Anweisungen einfügen. Die neue Border kann über den angegebenen Namen, wie im obigen Beispiel erläutert, verwendet werden.
