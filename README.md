@@ -41,8 +41,22 @@ show_menu(sizeof(items) / sizeof(struct MenuItem), items, "Vorlesungsaufgaben", 
  * 3. Argument: Titel des Menüs	 
  * 4. Argument: Menü im loop; Nach beenden der Methode wieder Menü aufrufen	
  * 5. Argument: Pause nach dem Ausführen der Methode; Ausgaben lesbar
- * 6. Argument: Style des Menüs: DEFAULT, MODERN, SOLID und NO_BORDER zur Zeit unterstützt
-*/
+ * 6. Argument: Style des Menüs: Standardmäßig wird DEFAULT, MODERN, SOLID und NO_BORDER unterstützt
+ */
   ````
-  
-  
+### Style hinzufügen
+Eigene Styles können wie folgt hinzugefügt werden:		
+```C
+const struct MenuBoder NAME = {	 
+ 'a', 	// Char für den rechten und linken Rand
+ 'b', 	// Char für den oberen und unteren Rand
+ 'c', 	// Char für die linke obere Ecke
+ 'd', 	// Char für die rechte obere Ecke
+ 'e', 	// Char für die linke untere Ecke
+ 'f', 	// Char für die rechte untere Ecke
+ 'g', 	// Char zwischen Border und Titel - links
+ 'h'	// Char zwischen Border und Titel - rechts
+}
+```
+
+Neue Styles am Besten direkt unter den #include Anweisungen einfügen. Der neue Style kann über den angegebenen Namen verwendet werden.
