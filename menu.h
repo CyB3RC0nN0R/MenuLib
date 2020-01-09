@@ -9,7 +9,7 @@ struct MenuItem {
 	void* (*action)(void);
 };
 
-
+/// <summary>Represents a border in which a menu is displayed.</summary>
 struct MenuBorder {
 	char line_vertical;
 	char line_horizontal;
@@ -22,13 +22,6 @@ struct MenuBorder {
 };
 
 const extern struct MenuBorder DEFAULT, MODERN, NO_BORDER, SOLID;
-
-/// <summary>Is used for style-switching</summary>
-/// <item name="DEFAULT">Default style with asterisks around the terminal</item>
-/// <item name="SOLID">Solid border with ASCII border characters</item>
-/// <item name="MODERN">Minimalistic design with bar instead of start>/item>
-/// <item name="NO_BORDER">No border, just plain text</item>
-
 
 /// <summary>Displaces a CUI menu to the user and lets them choose an option, then calls the corresponding function.</summary>
 /// <param name="itemc">The length of the array <c>itemv</c> of menu items.</param>
