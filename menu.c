@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "framework.h"
+
 #include "menu.h"
 
 const struct MenuBorder DEFAULT = {
@@ -17,6 +18,66 @@ const struct MenuBorder NO_BORDER = {
 const struct MenuBorder SOLID = {
 	186, 205, 201, 187, 200, 188, '[', ']'
 };
+
+void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
+
+void page(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop)
+{
+	unsigned int page_index = 0;
+	bool action_performed, loop, page_changed = true;
+	char page_key, itemKey;
+	int i;
+
+	do {
+		do {
+			show_menu(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
+
+			// Wait for user selection
+			putchar('>');
+			putchar(' ');
+
+			loop = pages[page_index].loopback;
+			page_key = _getch();
+
+			// Forward paging
+			if (page_key == 'm' && page_index < page_count - 1)
+				++page_index;
+			// Backward paging
+			else if (page_key == 'n' && page_index > 0)
+				--page_index;
+			else
+			{
+				page_changed = false;
+				itemKey = page_key;
+				do {
+					action_performed = false;
+
+					itemKey != page_key ? itemKey = _getch() : page_key;
+					page_key = 0;
+					for (i = 0; i < pages[page_index].item_count; ++i)
+					{
+						if (pages[page_index].items[i].key == itemKey)
+						{
+							// Perform action
+							system("cls");
+							pages[page_index].items[i].action();
+							action_performed = true;
+
+							// Pause if requested
+							if (pages[page_index].pause)
+							{
+								putchar('\n');
+								system("pause");
+							}
+						}
+					}
+				} while (!action_performed);
+			}
+		} while (loop || page_changed);
+
+		page_index = 0;
+	} while (infinite_loop);
+}
 
 // Checks if a line index should display a menu item
 bool is_item_line(const int line, const int itemc, int* item_index)
@@ -40,57 +101,8 @@ void get_console_dimensions(int* width, int* height)
 	*height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 }
 
-void page(const struct MenuPage *pages, const size_t page_count, const bool infinite_loop) {
-	unsigned int page_index = 0;
-	bool action_performed, loop, pageChanged = true;
-	char pageKey, itemKey;
-
-	do {
-		do {
-			show_menu(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
-
-			// Wait for user selection
-			putchar('>');
-			putchar(' ');
-	
-			loop = pages[page_index].loopback;
-			pageKey = _getch();
-
-			if (pageKey == 'm')
-				page_index < page_count - 1 ? page_index++ : page_index;
-			else if (pageKey == 'n') 
-				page_index > 0 ? page_index-- : page_index;
-			else {
-				pageChanged = false;
-				itemKey = pageKey;
-				do {
-					action_performed = false;
-
-					itemKey != pageKey ? itemKey = _getch() : pageKey;
-					pageKey = 0;
-					for (int i = 0; i < pages[page_index].item_count; ++i) {
-						if (pages[page_index].items[i].key == itemKey) {
-							// Perform action
-							system("cls");
-							pages[page_index].items[i].action();
-							action_performed = true;
-
-							// Pause if requested
-							if (pages[page_index].pause) {
-								putchar('\n');
-								system("pause");
-							}
-						} 
-					}
-				} while (!action_performed);
-			}
-		} while (loop || pageChanged);
-
-		page_index = 0;
-	} while (infinite_loop);
-}
-
-void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder *border)
+// Draws a menu to the console
+void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border)
 {
 	unsigned width, height, item_index;
 
@@ -99,7 +111,7 @@ void show_menu(const int itemc, const struct MenuItem itemv[], const char title[
 
 	// Get the width and height of the console window
 	get_console_dimensions(&width, &height);
-	
+
 	// Print frame with title
 	for (unsigned i = 0; i < height - 1; ++i)
 	{
@@ -111,13 +123,13 @@ void show_menu(const int itemc, const struct MenuItem itemv[], const char title[
 
 			for (unsigned j = 1; j < width - strlen(title) - 2; ++j)
 			{
-				if (j == ((width - strlen(title)) - 2)/ 2)
+				if (j == ((width - strlen(title)) - 2) / 2)
 				{
 					putchar(border->title_left);
 					fputs(title, stdout);
 					putchar(border->title_right);
 				}
-				else 
+				else
 				{
 					putchar(border->line_horizontal);
 				}
@@ -132,7 +144,7 @@ void show_menu(const int itemc, const struct MenuItem itemv[], const char title[
 			// Print item text
 			putchar(border->line_vertical);
 
- 			if (strcmp(itemv[item_index].text, "BLANK") == 0) {
+			if (strcmp(itemv[item_index].text, "BLANK") == 0) {
 				putchar('\t');
 
 				// BLANK equals 5 characters 
@@ -146,13 +158,13 @@ void show_menu(const int itemc, const struct MenuItem itemv[], const char title[
 			{
 				printf("\t%c) %s", itemv[item_index].key, itemv[item_index].text);
 			}
-			
+
 			// Print right side of frame
 			for (unsigned j = 0; j < width - strlen(itemv[item_index].text) - 12; ++j)
 			{
 				putchar(' ');
 			}
-			
+
 			putchar(border->line_vertical);
 		}
 		// Line above bottom line
