@@ -12,8 +12,11 @@ Verweis auf die Bibliothek im Aufruferprojekt anlegen:
 > Haken bei "MenuLib" setzen.
 
 Zusätzliches Includeverzeichnis hinzufügen:
-> Rechtsklick auf Aufruferprojekt -> Eigenschaften -> Linked -> Eingabe -> Zusätzliche Abhängigkeiten -> Bearbeiten...
+> Rechtsklick auf Aufruferprojekt -> Eigenschaften -> C/C++ -> Allgemein -> Zusätzliche Includeverzeichnisse -> Bearbeiten...
+
 > Ordner, der "menu.h" enthält, auswählen
+
+> Diese Einstellung muss für die Konfiguration erfolgen, die später compiliert werden soll.
 
 Headerdatei einbinden:
 > Zeile ```#include "menu.h"``` zur Quelldatei hinzufügen
@@ -24,8 +27,8 @@ struct MenuItem items[] = {
 	{"Euklidscher Algorithmus",	'1', (void*)&euklid},	// String = Name des Menüpunktes
 	{"Gerstenkorn",			'2', (void*)&gerste},	// Char = Taste zum Aufrufen
 	{"Osterdatum ausrechnen",	'3', (void*)&ostern},	// (void*)&MethodenName = Methode, die aufgerufen wird
-	{"ASCII Tabelle",		'4', (void*)&ascii},		// Methode MUSS nicht vom Typ void sein! 
-	{"DB-Pruefziffer",		'5', (void*)&db},		// (void*)& MUSS immer davor stehen!
+	{"ASCII Tabelle",		'4', (void*)&ascii},	// Methode MUSS nicht vom Typ void sein! 
+	{"DB-Pruefziffer",		'5', (void*)&db},	// (void*)& MUSS immer davor stehen!
 	{"Modulo 11",			'6', (void*)&mod11},
 	{"BLANK",			NULL, (void*)NULL},	// Fügt einen leere Zeile hinzu -> Gliederung
 	{"Namen TEST",			'7', (void*)&namen},
@@ -57,7 +60,7 @@ struct MenuPage pages[] = {
 	 * 6. Argument: Style des Menüs: Standardmäßig wird DEFAULT, MODERN, SOLID und NO_BORDER unterstützt
 	 */
 };
-show_menu(pages, sizeof(pages) / sizeof(struct MenuPage), true);
+page(pages, sizeof(pages) / sizeof(struct MenuPage), true);
 
 /* 
  * 1. Argument: Vorher angelegtes struct; Enthält alle Seiten des Menüs
