@@ -60,7 +60,7 @@ struct MenuPage pages[] = {
 	 * 6. Argument: Style des Menüs: Standardmäßig wird DEFAULT, MODERN, SOLID und NO_BORDER unterstützt
 	 */
 };
-page(pages, sizeof(pages) / sizeof(struct MenuPage), true);
+show_menu(pages, sizeof(pages) / sizeof(struct MenuPage), true);
 
 /* 
  * 1. Argument: Vorher angelegtes struct; Enthält alle Seiten des Menüs
