@@ -39,11 +39,11 @@ struct MenuPage {
 /// <param name="pages">An array of all pages to display.</param>
 /// <param name="page_count">The length of the array <c>pages</c>.</param>
 /// <param name="infinite_loop">Always display the first page after a loopback=false item finished executing.</param>
-void page(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
+void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
 
 /// <summary>Displaces a CUI menu to the user</summary>
 /// <param name="itemc">The length of the array <c>itemv</c> of menu items.</param>
 /// <param name="itemv">An array of all menu items to display in the menu.</param>
 /// <param name="title">The title of the menu.</param>
 /// <param name="border">Specifies the border in which the menu is displayed.</param>
-void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder *border);
+void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
