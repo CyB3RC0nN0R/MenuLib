@@ -37,4 +37,4 @@ struct MenuPage {
 /// <param name="pages">An array of all pages to display.</param>
 /// <param name="page_count">The length of the array <c>pages</c>.</param>
 /// <param name="infinite_loop">Always display the first page after a loopback=false item finished executing.</param>
-void page(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
+void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);

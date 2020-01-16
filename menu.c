@@ -19,9 +19,9 @@ const struct MenuBorder SOLID = {
 	186, 205, 201, 187, 200, 188, '[', ']'
 };
 
-void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
+void print_content(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
 
-void page(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop)
+void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop)
 {
 	unsigned int page_index = 0;
 	bool action_performed, loop, page_changed = true;
@@ -30,7 +30,7 @@ void page(const struct MenuPage* pages, const size_t page_count, const bool infi
 
 	do {
 		do {
-			show_menu(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
+			print_content(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
 
 			// Wait for user selection
 			putchar('>');
@@ -102,7 +102,7 @@ void get_console_dimensions(int* width, int* height)
 }
 
 // Draws a menu to the console
-void show_menu(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border)
+void print_content(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border)
 {
 	unsigned width, height, item_index;
 
