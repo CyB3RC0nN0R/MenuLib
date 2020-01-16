@@ -47,6 +47,9 @@ void show_menu(const struct MenuPage* pages, const size_t page_count, const bool
 				--page_index;
 			else
 			{
+				if (page_key == 'n' || page_key == 'm')
+					break;
+
 				page_changed = false;
 				itemKey = page_key;
 				do {
