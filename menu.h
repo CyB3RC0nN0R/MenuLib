@@ -6,7 +6,8 @@
 struct MenuItem {
 	char* text;
 	char key;
-	void* (*action)(void);
+	void* (*action)(void* params);
+	void* param;
 };
 
 /// <summary>Represents a border in which a menu is displayed.</summary>

@@ -63,7 +63,7 @@ void show_menu(const struct MenuPage* pages, const size_t page_count, const bool
 						{
 							// Perform action
 							system("cls");
-							pages[page_index].items[i].action();
+							pages[page_index].items[i].action(pages[page_index].items[i].param);
 							action_performed = true;
 
 							// Pause if requested
