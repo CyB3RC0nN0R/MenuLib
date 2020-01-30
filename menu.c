@@ -1,5 +1,6 @@
 #include "menu.h"
 
+#include <conio.h>
 #include <stdio.h>
 #include <Windows.h>
 
@@ -19,66 +20,67 @@ const struct MenuBorder SOLID = {
 	186, 205, 201, 187, 200, 188, '[', ']'
 };
 
-void print_content(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
+void print_content(const size_t itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
 
 void show_menu(const struct MenuPage* pages, const size_t page_count, const int infinite_loop)
 {
-	unsigned int page_index = 0;
-	int action_performed, loop, page_changed = 1;
-	char page_key, itemKey;
-	int i;
+	unsigned page_index = 0;
+	int action_performed, page_changed, i;
+	char key;
 
 	do {
+		print_content(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
+
+		// Wait for user selection
+		putchar('>');
+		putchar(' ');
+
 		do {
-			print_content(pages[page_index].item_count, pages[page_index].items, pages[page_index].title, pages[page_index].border);
+			page_changed = 0;
+			action_performed = 0;
 
-			// Wait for user selection
-			putchar('>');
-			putchar(' ');
-
-			loop = pages[page_index].loopback;
-			page_key = _getch();
+			// Get user selection
+			key = _getch();
 
 			// Forward paging
-			if (page_key == 'm' && page_index < page_count - 1)
+			if (key == 'm' && page_index < page_count - 1)
+			{
 				++page_index;
+				page_changed = 1;
+			}
 			// Backward paging
-			else if (page_key == 'n' && page_index > 0)
+			else if (key == 'n' && page_index > 0)
+			{
 				--page_index;
+				page_changed = 1;
+			}
 			else
 			{
-				if (page_key == 'n' || page_key == 'm')
-					break;
-
-				page_changed = 0;
-				itemKey = page_key;
-				do {
-					action_performed = 0;
-
-					itemKey != page_key ? itemKey = _getch() : page_key;
-					page_key = 0;
-					for (i = 0; i < pages[page_index].item_count; ++i)
+				// Search for action with a matching key
+				for (i = 0; i < pages[page_index].item_count; ++i)
+				{
+					if (pages[page_index].items[i].key == key)
 					{
-						if (pages[page_index].items[i].key == itemKey)
-						{
-							// Perform action
-							system("cls");
-							pages[page_index].items[i].action(pages[page_index].items[i].param);
-							action_performed = 1;
+						// Perform action
+						system("cls");
+						pages[page_index].items[i].action(pages[page_index].items[i].param);
+						action_performed = 1;
 
-							// Pause if requested
-							if (pages[page_index].pause)
-							{
-								putchar('\n');
-								system("pause");
-							}
+						// Pause if requested
+						if (pages[page_index].pause)
+						{
+							putchar('\n');
+							system("pause");
 						}
 					}
-				} while (!action_performed);
+				}
 			}
-		} while (loop || page_changed);
+		} while (!action_performed && !page_changed);
 
-		page_index = 0;
+		if (!pages[page_index].loopback && !page_changed)
+		{
+			page_index = 0;
+		}
 	} while (infinite_loop);
 }
 
@@ -105,7 +107,7 @@ void get_console_dimensions(int* width, int* height)
 }
 
 // Draws a menu to the console
-void print_content(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border)
+void print_content(const size_t itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border)
 {
 	unsigned width, height, item_index;
 
@@ -142,7 +144,7 @@ void print_content(const int itemc, const struct MenuItem itemv[], const char ti
 			putchar(border->corner_upper_right);
 		}
 		// Line with menu item
-		else if (is_item_line(i, itemc, &item_index))
+		else if (is_item_line(i, (int)itemc, &item_index))
 		{
 			// Print item text
 			putchar(border->line_vertical);
