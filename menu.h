@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include <stdlib.h>
 
 /// <summary>Represents one menu item in a menu.</summary>
 struct MenuItem {
@@ -30,7 +30,7 @@ struct MenuPage {
 	const struct MenuItem* items;
 	const size_t item_count;
 	char* title;
-	bool loopback, pause;
+	int loopback, pause;
 	const struct MenuBorder* border;
 };
 
@@ -38,4 +38,4 @@ struct MenuPage {
 /// <param name="pages">An array of all pages to display.</param>
 /// <param name="page_count">The length of the array <c>pages</c>.</param>
 /// <param name="infinite_loop">Always display the first page after a loopback=false item finished executing.</param>
-void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop);
+void show_menu(const struct MenuPage* pages, const size_t page_count, const int infinite_loop);

@@ -1,7 +1,7 @@
-#include "pch.h"
-#include "framework.h"
-
 #include "menu.h"
+
+#include <stdio.h>
+#include <Windows.h>
 
 const struct MenuBorder DEFAULT = {
 	'*', '*', '*', '*', '*', '*', '[', ']'
@@ -21,10 +21,10 @@ const struct MenuBorder SOLID = {
 
 void print_content(const int itemc, const struct MenuItem itemv[], const char title[], const struct MenuBorder* border);
 
-void show_menu(const struct MenuPage* pages, const size_t page_count, const bool infinite_loop)
+void show_menu(const struct MenuPage* pages, const size_t page_count, const int infinite_loop)
 {
 	unsigned int page_index = 0;
-	bool action_performed, loop, page_changed = true;
+	int action_performed, loop, page_changed = 1;
 	char page_key, itemKey;
 	int i;
 
@@ -50,10 +50,10 @@ void show_menu(const struct MenuPage* pages, const size_t page_count, const bool
 				if (page_key == 'n' || page_key == 'm')
 					break;
 
-				page_changed = false;
+				page_changed = 0;
 				itemKey = page_key;
 				do {
-					action_performed = false;
+					action_performed = 0;
 
 					itemKey != page_key ? itemKey = _getch() : page_key;
 					page_key = 0;
@@ -64,7 +64,7 @@ void show_menu(const struct MenuPage* pages, const size_t page_count, const bool
 							// Perform action
 							system("cls");
 							pages[page_index].items[i].action(pages[page_index].items[i].param);
-							action_performed = true;
+							action_performed = 1;
 
 							// Pause if requested
 							if (pages[page_index].pause)
@@ -83,7 +83,7 @@ void show_menu(const struct MenuPage* pages, const size_t page_count, const bool
 }
 
 // Checks if a line index should display a menu item
-bool is_item_line(const int line, const int itemc, int* item_index)
+int is_item_line(const int line, const int itemc, int* item_index)
 {
 	if (line >= 2 && line % 2 == 0)
 	{
@@ -91,7 +91,7 @@ bool is_item_line(const int line, const int itemc, int* item_index)
 		*item_index = (line - 2) / 2;
 		return *item_index < itemc;
 	}
-	return false;
+	return 0;
 }
 
 // Acquires the dimensions (width and height) of the console window
